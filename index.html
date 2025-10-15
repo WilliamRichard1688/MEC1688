@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MONEY EXPRESS CAMBODIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet"/>
+    <style>
+        /* Intro styles */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff; /* White background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top */
+            overflow: hidden;
+        }
+
+        .intro-text-container {
+            font-family: 'Montserrat', sans-serif; /* Changed to Montserrat */
+            color: #d4af37; /* Golden text */
+            font-size: 3em;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards, fadeOut 0.8s 2s forwards;
+        }
+
+        .intro-text-line {
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 1s forwards;
+        }
+
+        .intro-text-line:nth-child(1) { animation-delay: 0.2s; }
+        .intro-text-line:nth-child(2) { animation-delay: 0.4s; }
+        .intro-text-line:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main content styles */
+        #main-content {
+            display: none; /* Hidden by default, shown after intro */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 2.5em; }
+        h2 { font-size: 2em; }
+        h3 { font-size: 1.75em; }
+
+        .info-box, .exchange-box, .contact-info, .loan-info, .savings-info, .why-choose-us {
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            background-color: #ffffff;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 15px;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .input-group select:focus,
+        .input-group input:focus {
+            border-color: #d4af37;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Result text styling */
+        #result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        #result strong {
+            color: #d4af37;
+            font-size: 1.2em;
+        }
+
+        #result .rate-info {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 20px;
+        }
+
+        /* Other sections' styles (remaining from original) */
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 1.2em;
+        }
+
+        .tradingview-widget-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .international-section {
+            background: linear-gradient(to right, #f4f4f4, #e0e0e0);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .currency-info {
+            padding: 25px;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency-info h3 {
+            font-size: 1.5em;
+            color: #d4af37;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .currency-info p {
+            margin-bottom: 10px;
+        }
+
+        .why-choose-us {
+            background-color: #ffffff;
+            padding: 25px;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+		
+        /* Styles for blurred "Coming Soon" sections */
+        .blurred-section {
+            position: relative;
+            overflow: hidden; /* To contain the overlay */
+        }
+
+        .blurred-section .content-to-blur {
+            filter: blur(5px);
+            -webkit-filter: blur(5px); /* For Safari */
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .blurred-section .coming-soon-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #d4af37; /* Use the theme color */
+            font-family: 'Playfair Display', serif; /* Use the heading font */
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .telegram-logo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0088cc;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        .telegram-logo:hover {
+            transform: scale(1.1);
+            background-color: #0077b6;
+        }
+
+        .telegram-logo svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="intro-screen">
+        <div class="intro-text-container">
+            <span class="intro-text-line">MONEY</span>
+            <span class="intro-text-line">EXPRESS</span>
+            <span class="intro-text-line">CAMBODIA</span>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="container">
+            <h1>MONEY EXPRESS CAMBODIA</h1>
+
+            <div class="container why-choose-us">
+                <h2>Why Choose Us</h2>
+                <p>Low service fees to save your money</p>
+                <p>Easy and secure payments, faster than ever</p>
+                <p>Enhanced protection for your financial safety</p>
+                <p>Available daily from 8:00 AM to 8:00 PM</p>
+                <p>Updated Date: <span id="currentDate"></span> at 7:00 AM</p>
+            </div>
+
+            <div class="international-section">
+                <div class="currency-info">
+                    <h3>Convert Your Currency</h3>
+                    <div class="input-group">
+                        <label for="fromCurrency">From Currency</label>
+                        <select id="fromCurrency">
+                            <option value="USD">US Dollar (USD)</option>
+                            <option value="KHR">Cambodian Riel (KHR)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="toCurrency">To Currency</label>
+                        <select id="toCurrency">
+                            <option value="USD">US Dollar (USD)</option>
+                            <option value="KHR">Cambodian Riel (KHR)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="amount">Amount</label>
+                        <input type="text" id="amount" placeholder="Enter amount">
+                    </div>
+
+                    <div id="result"></div>
+                </div>
+            </div>
+
+            <div class="container why-choose-us blurred-section">
+                <div class="coming-soon-overlay">Coming Soon</div>
+                <div class="content-to-blur">
+                    <h2>Loan & Information</h2>
+                    <p>Your Loan, Your Way
+                    At MONEY EXPRESS CAMBODIA, we believe everyone deserves financial support that fits. We offer customized loan options designed to meet your goals—with the guidance and care you expect from a local, trusted partner.</p>
+                </div>
+            </div>
+
+            <div class="container why-choose-us blurred-section">
+                <div class="coming-soon-overlay">Coming Soon</div>
+                <div class="content-to-blur">
+                    <h2>Loan short-term</h2>
+                    <p>We offer short-term, microloans designed for your convenience.</p>
+                    <p>Loan Duration: 1 weeks</p>
+                    <p>Loan Amount: $100 to $1,000</p>
+                    <p>Interest Rate: 10%</p>
+                    <p>Fast approval and easy repayment options. Apply now to get the funds you need!</p>
+                </div>
+            </div>
+
+            <div class="container why-choose-us">
+                <h2>Fixed Deposit</h2>
+                <p>Secure your savings with our competitive fixed deposit plans</p>
+                <p>Attractive interest rates up to 8.88% p.a.</p>
+                <p>Flexible tenure options 3/6/12 months</p>
+                <p>Monthly or maturity interest payout</p>
+                <p>Tax-efficient savings solutions</p>
+                <p>100% principal protection.</p>
+            </div>
+
+            <div class="container why-choose-us">
+                <h2>Fixed Deposit Rules</h2>
+                <p><strong>Minimum Deposit:</strong> $100 or 400,000 KHR minimum (institution may vary).</p>
+                <p><strong>Flexible Terms:</strong> Choose 1 to 12+ months.</p>
+                <p><strong>Interest Payments:</strong> Monthly (12+ months) or at maturity.</p>
+                <p><strong>Early Withdrawal:</strong> Allowed with reduced or no interest.</p>
+                <p><strong>Renewal Options:</strong> Automatic or manual renewal.</p>
+                <p><strong>Payment Methods:</strong> Cash, bank transfer, or KHQR.</p>
+                <p><strong>Certificate Handling:</strong> Keep your certificate safe; report if lost.</p>
+                <p><strong>Lost Certificate:</strong> ID and police report may be required.</p>
+                <p><strong>Beneficiary Option:</strong> Assign a legal recipient.</p>
+                
+            </div>
+
+            <div class="container why-choose-us blurred-section">
+                <div class="coming-soon-overlay">Coming Soon</div>
+                <div class="content-to-blur">
+                    <h2>Loan Rules</h2>
+                    <p><strong>Eligibility:</strong> Cambodian citizen or legal resident, 18+ years.</p>
+                    <p><strong>Loan Amount:</strong> Based on income, need, and repayment ability.</p>
+                    <p><strong>Interest Rates:</strong> Fixed or Declining; EIR must be shown.</p>
+                    <p><strong>Loan Duration:</strong> 1 to 12+ months.</p>
+                    <p><strong>Repayment:</strong> Monthly or customized schedule.</p>
+                    <p><strong>Early Repayment:</strong> Allowed, may reduce interest.</p>
+                    <p><strong>Collateral:</strong> May be required (e.g., land, moto, title).</p>
+                    <p><strong>Documents:</strong> ID, family book, income proof, collateral proof.</p>
+                    <p><strong>Loan Agreement:</strong> Must be signed with witnesses.</p>
+                </div>
+            </div>
+
+            <div class="container why-choose-us">
+                <h2>Currency Exchange Rules & Information</h2>
+                <p><strong>Exchange Rate:</strong></p>
+                <p>BUY 1 USD = 4005 KHR</p>
+                <p>SELL 1 USD = 4010 KHR</p>
+                <p><strong>Available Currencies:</strong> US Dollar (USD) and Cambodian Riel (KHR).</p>
+                <p>Rates change frequently — confirmed only at the time of transaction.</p>
+                <p><strong>Minimum:</strong> $10 | <strong>Maximum:</strong> $10,000 per transaction.</p>
+                <p>Valid ID is required for transactions over $500.</p>
+                <p>No hidden fees — transparent and fair.</p>
+                <p>Receipts are provided — please verify before leaving.</p>
+                <p>Exchange rate is valid only at transaction time.</p>
+                <p>Advance notice required for exchanges over $10,000.</p>
+                <p>Some currencies may require pre-order due to limited availability.</p>
+                <p>Please double-check the amount and rate before confirming.</p>
+                <p>All exchanges are final — no refunds once completed.</p>
+            </div>
+            <div class="container why-choose-us">
+                <h2>Contact Us</h2>
+                <p>+855 89 202 808</p>
+                <p>National Road No. 1, Sangkat Niroth, Khan Chbar Ampov, Phnom Penh, 12357</p>
+            </div>
+        </div>
+
+        <a href="https://t.me/MoneyExpressKH" target="_blank" class="telegram-logo">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.598.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+            </svg>
+        </a>
+    </div>
+
+    <script>
+        // JavaScript for intro screen
+        document.addEventListener('DOMContentLoaded', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+            const currentDateSpan = document.getElementById('currentDate');
+
+            // Function to get and format the current date (dd/mm/yyyy)
+            function getCurrentDateFormatted() {
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                const year = today.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            // Set the current date when the DOM is loaded
+            if (currentDateSpan) {
+                currentDateSpan.textContent = getCurrentDateFormatted();
+            }
+
+            // Hide intro screen and show main content after a delay
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                // Trigger initial conversion after main content is visible if needed
+                // convertCurrency(); // Uncomment if you want an initial conversion display
+            }, 2800);
+
+            // Add event listeners for automatic currency conversion on input change
+            document.getElementById('fromCurrency').addEventListener('change', convertCurrency);
+            document.getElementById('toCurrency').addEventListener('change', convertCurrency);
+            document.getElementById('amount').addEventListener('input', convertCurrency); // Using 'input' for real-time updates
+        });
+
+        /**
+         * Formats a number to a localized string with two decimal places.
+         * @param {number} num - The number to format.
+         * @returns {string} The formatted number string.
+         */
+        function formatNumber(num) {
+            return num.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        /**
+         * Converts currency based on user input and displays the result.
+         * Handles input validation, currency selection, and applies specific exchange rates.
+         */
+        function convertCurrency() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            // Clean amount input by removing commas and parse as float
+            const amountInput = document.getElementById('amount').value.replace(/,/g, '');
+            const amount = parseFloat(amountInput);
+
+            // Define exchange rates based on the provided rules.
+            // "BUY 1 USD = 4005 KHR" (for USD to KHR conversion)
+            // "SELL 1 USD = 4010 KHR" (meaning 1 KHR = 1/4010 USD for KHR to USD conversion)
+            const exchangeRates = {
+                USD: { KHR: 4005 },
+                KHR: { USD: 1 / 4010 } // 1 KHR = 1/4010 USD
+            };
+
+            const resultDiv = document.getElementById('result');
+
+            // Hide the result and return if the amount input is empty, not a number, or less than/equal to zero
+            if (amountInput === '' || isNaN(amount) || amount <= 0) {
+                resultDiv.style.display = 'none';
+                return;
+            }
+
+            // Display an error if the user tries to convert to the same currency
+            if (fromCurrency === toCurrency) {
+                resultDiv.innerHTML = '<div class="error-message">Please select different currencies.</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            let rate;
+            // Determine the correct rate based on the direction of conversion
+            if (fromCurrency === 'USD' && toCurrency === 'KHR') {
+                rate = exchangeRates.USD.KHR; // Convert USD to KHR
+            } else if (fromCurrency === 'KHR' && toCurrency === 'USD') {
+                rate = exchangeRates.KHR.USD; // Convert KHR to USD
+            } else {
+                // Fallback for unexpected currency pairs (shouldn't happen with current options)
+                resultDiv.innerHTML = '<div class="error-message">Invalid currency selection or rate not available.</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            // Check if the determined rate is valid
+            if (typeof rate === 'undefined' || isNaN(rate)) {
+                resultDiv.innerHTML = '<div class="error-message">Exchange rate not available for this conversion.</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+
+            const converted = amount * rate;
+
+            // Display the conversion result and the effective exchange rate
+            resultDiv.innerHTML = `
+                ${formatNumber(amount)} ${fromCurrency} = <strong>${formatNumber(converted)} ${toCurrency}</strong>
+                <span class="rate-info">Exchange Rate: 1 ${fromCurrency} = ${rate.toFixed(6)} ${toCurrency}</span>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
